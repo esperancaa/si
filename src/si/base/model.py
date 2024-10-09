@@ -2,6 +2,10 @@ from abc import ABCMeta, ABC, abstractmethod
 
 from si.base.estimator import Estimator
 
+import numpy as np
+
+from si.data.dataset import Dataset
+
 
 class Model(Estimator, ABC):
     """
@@ -15,7 +19,7 @@ class Model(Estimator, ABC):
         """
         super().__init__(**kwargs)
 
-    def predict(self, dataset):
+    def predict(self, dataset) -> np.ndarray:
         """
         Predict the target values of the dataset.
         The model needs to be fitted before calling this method.
@@ -35,7 +39,7 @@ class Model(Estimator, ABC):
         return self._predict(dataset)
 
     @abstractmethod
-    def _predict(self, dataset):
+    def _predict(self, dataset) -> np.ndarray:
         """
         Predict the target values of the dataset.
         Abstract method that needs to be implemented by all subclasses.
@@ -68,3 +72,19 @@ class Model(Estimator, ABC):
         """
         self.fit(dataset)
         return self.predict(dataset)
+    
+    @abstractmethod
+    def _score(self, dataset: Dataset, predictions: np.ndarray) -> float:
+        """
+        
+        """
+
+    def score(self, dataset: Dataset) -> float:
+        
+        if self.is_fitted():
+
+            predictions = self.predict(dataset=dataset)
+            self._score(dataset, predictions=predictions)
+        
+        else:
+            raise ValueError("Your model is not fitted, please call method.fit")

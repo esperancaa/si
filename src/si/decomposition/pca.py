@@ -1,5 +1,3 @@
-import sys
-sys.path.append("/Users/utilizador/Documents/GitHub/si/src")
 import matplotlib.pyplot as plt
 import numpy as np
 from si.io.csv_file import read_csv

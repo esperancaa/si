@@ -278,20 +278,3 @@ class Dataset:
         X = np.random.rand(n_samples, n_features)
         y = np.random.randint(0, n_classes, n_samples)
         return cls(X, y, features=features, label=label)
-
-
-if __name__ == '__main__':
-    X = np.array([[1, 2, 3], [4, 5, 6]])
-    y = np.array([1, 2])
-    features = np.array(['a', 'b', 'c'])
-    label = 'y'
-    dataset = Dataset(X, y, features, label)
-    print(dataset.shape())
-    print(dataset.has_label())
-    print(dataset.get_classes())
-    print(dataset.get_mean())
-    print(dataset.get_variance())
-    print(dataset.get_median())
-    print(dataset.get_min())
-    print(dataset.get_max())
-    print(dataset.summary())

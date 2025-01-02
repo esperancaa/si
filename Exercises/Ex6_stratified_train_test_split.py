@@ -1,7 +1,11 @@
+import sys
+import numpy as np
+sys.path.append("/Users/utilizador/Documents/GitHub/si/src")
 from sklearn.utils import shuffle
 from typing import Tuple
 import numpy as np
 from si.data.dataset import Dataset
+from si.io.csv_file import read_csv
 
 def stratified_train_test_split(dataset:Dataset, test_size=0.2, random_state:int =None) ->Tuple[Dataset, Dataset]:
     """
@@ -24,7 +28,10 @@ def stratified_train_test_split(dataset:Dataset, test_size=0.2, random_state:int
     
     """
     
-    labels = dataset.y
+    X= dataset.X
+    y= dataset.y
+    
+    labels = y
     unique_classes, class_counts = np.unique(labels, return_counts=True)
     train= []
     test=[]
@@ -45,15 +52,17 @@ def stratified_train_test_split(dataset:Dataset, test_size=0.2, random_state:int
         lables_train_idxs= idxs[num_test:]
         train.extend(lables_train_idxs)
     
-    train= np.array(train)
-    test= np.array(test)
+    train= np.array(train,dtype=int)
+    test= np.array(test,dtype=int)
     
-    # Create training and testing datasets
     X_train, X_test = X[train], X[test]
     y_train, y_test = y[train], y[test]
     
     train_dataset = {'data': X_train, 'target': y_train}
     test_dataset = {'data': X_test, 'target': y_test}
     
-    # Return the training and testing datasets
+    train_dataset = Dataset(X_train, y_train, features=dataset.features, label=dataset.label)
+    test_dataset = Dataset(X_test, y_test, features=dataset.features, label=dataset.label)
+    
+
     return train_dataset, test_dataset

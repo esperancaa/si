@@ -21,7 +21,7 @@ def cosine_distance(x:np.ndarray, y:np.ndarray) -> float:
     
     """
     distances= []
-    dot_product = np.dot(x, y)
+    dot_product = np.dot(x, y) #faz a multiplicação 
     magnitude_x = np.linalg.norm(x)
     magnitude_y = np.linalg.norm(y)
     cosine_similarity = dot_product / (magnitude_x * magnitude_y)

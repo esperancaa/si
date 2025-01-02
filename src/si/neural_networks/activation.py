@@ -5,6 +5,8 @@ import numpy as np
 
 from si.neural_networks.layers import Layer
 
+from si.neural_networks.activation import ActivationLayer
+
 
 class ActivationLayer(Layer):
     """
@@ -177,3 +179,90 @@ class ReLUActivation(ActivationLayer):
             The derivative of the activation function.
         """
         return np.where(input >= 0, 1, 0)
+
+
+class Softmaxactivation(ActivationLayer):
+    """
+    Softmax activation function.
+    """
+
+    def activation_function(self, input: np.ndarray):
+        """
+        Softmax activation function.
+
+        Parameters
+        ----------
+        input: numpy.ndarray
+            The input to the layer.
+
+        Returns
+        -------
+        numpy.ndarray
+            The output of the layer.
+        """
+        shifted_input = input - np.max(input, axis=-1, keepdims=True)
+        #fico com um novo input penso que seja para evitar altos valores exponenciais 
+        # Compute the exponentials of the shifted input
+        exp_input = np.exp(shifted_input)
+
+        # Compute the softmax output
+        softmax_output = exp_input / np.sum(exp_input, axis=-1, keepdims=True) #formula
+
+        return softmax_output
+
+    def derivative(self, input: np.ndarray):
+        """
+        Derivative of the Softmax activation function.
+
+        Parameters
+        ----------
+        input: numpy.ndarray
+            The input to the layer.
+
+        Returns
+        -------
+        numpy.ndarray
+            The derivative of the activation function.
+        """
+        return self.activation_function(input)*(1-self.activation_function(input))
+
+class TanhActivation(ActivationLayer):
+    """
+    Tanh activation function.
+    """
+
+    def activation_function(self, input: np.ndarray):
+        """
+        Tanh  activation function.
+
+        Parameters
+        ----------
+        input: numpy.ndarray
+            The input to the layer.
+
+        Returns
+        -------
+        numpy.ndarray
+            The output of the layer.
+        """
+        numerador=np.exp(input)-np.exp(-input) #seguir formula
+        denominador=np.exp(input) + np.exp(-input)
+        return numerador/denominador
+
+    def derivative(self, input: np.ndarray):
+        """
+        Derivative of the Tanh  activation function.
+
+        Parameters
+        ----------
+        input: numpy.ndarray
+            The input to the layer.
+
+        Returns
+        -------
+        numpy.ndarray
+            The derivative of the activation function.
+        """
+        tanh_output = self.activation_function(input)
+        return 1 - (tanh_output ** 2)
+    

@@ -20,7 +20,10 @@ def euclidean_distance(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     np.ndarray
         Euclidean distance for each point in y.
     """
-    return np.sqrt(((x - y) ** 2).sum(axis=1))
+    if x.ndim == 1:
+        return np.sqrt(((x - y) ** 2).sum())
+    else:
+        return np.sqrt(((x - y) ** 2).sum(axis=1))
 
 
 if __name__ == '__main__':

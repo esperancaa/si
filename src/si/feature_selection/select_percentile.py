@@ -1,11 +1,7 @@
-
-from typing import Callable
-
-import numpy as np
-
 from si.base.transformer import Transformer
 from si.data.dataset import Dataset
 from si.statistics.f_classification import f_classification
+import numpy as np
 
 
 
@@ -33,6 +29,7 @@ class SelectPercentile(Transformer):
     """
     
     def __init__(self, score_func: callable= f_classification, percentile:int =50):
+        
         self.score_func = score_func
         self.percentile = percentile
         self.F= None
@@ -77,16 +74,13 @@ class SelectPercentile(Transformer):
             
         """
         
-        # get the percentile of the F values
-        percentile = np.percentile(self.F, self.percentile)
+        percentile = np.percentile(self.F, self.percentile) # vai buscar o percentile do f values
         
-        # get the indices of the features that have the F value <= to the percentile
-        idxs = np.where(self.F > percentile)[0]
+        idxs = np.where(self.F > percentile)[0] # vai buscar os indices das features que tem f values
+
+        features = np.array(dataset.features)[self.F > percentile] #vai buscar o nome das features
         
-        # get the names of the features
-        features = np.array(dataset.features)[idxs]
-        
-        return Dataset(X=dataset.X[:, idxs], y=dataset.y, features=list(features), label=dataset.label)
+        return Dataset(X=dataset.X[:, idxs], y=dataset.y, features=features, label=dataset.label)
         
         
     def fit_transform(self, dataset: Dataset) -> Dataset:
@@ -108,18 +102,3 @@ class SelectPercentile(Transformer):
         self.fit(dataset)
         return self.transform(dataset)
     
-
-if __name__ == '__main__':
-    from si.data.dataset import Dataset
-
-    dataset= Dataset(X=np.array([[0, 2, 0, 3],
-                                  [0, 1, 4, 3],
-                                  [0, 1, 1, 3]]),
-                      y=np.array([0, 1, 0]),
-                      features=["f1", "f2", "f3", "f4"],
-                      label="y")
-
-    selector = SelectPercentile(percentile=50)
-    selector = selector.fit(dataset)
-    dataset = selector.transform(dataset)
-    print(dataset.features)   

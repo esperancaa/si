@@ -5,8 +5,6 @@ import numpy as np
 
 from si.neural_networks.layers import Layer
 
-from si.neural_networks.activation import ActivationLayer
-
 
 class ActivationLayer(Layer):
     """
